@@ -82,7 +82,7 @@ class HomePageTest(unittest.TestCase):
 
         login_status = self.browser.find_element_by_id('id_login_status')
         self.assertIn(
-            'Login Successfull!',
+            'Login Failed!',
             login_status.text
         )
 

@@ -5,6 +5,13 @@
     </head>
     <body>
         <h1>Login - Conpec</h1>
-        <input id="id_username" placeholder="Username"/>
+        <form method="POST">
+            <input id="id_username" name='username' type="text" placeholder="Username"/>
+            <input id="id_password" name='password' type="password" placeholder="Password"/>
+            {% csrf_token %}
+            <input id="id_submit" name="submit" type="submit" value="Login"/>
+        </form>
+        <p id="id_error_messages">{{ error_messages }}</p>
+        <p id="id_login_status">{{ login_status }}</p>
     </body>
 </html>

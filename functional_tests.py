@@ -2,6 +2,7 @@
 import unittest
 from django.core.urlresolvers import reverse
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 
 class HomePageTest(unittest.TestCase):
@@ -25,16 +26,65 @@ class HomePageTest(unittest.TestCase):
         header = self.browser.find_element_by_tag_name('h1')
         self.assertIn('Login', header.text)
 
-        # Test to check if there is a input_box in the page
-        input_box = self.browser.find_element_by_id('id_username')
+        # Test to check if there is a username_input_box in the page
+        username_input_box = self.browser.find_element_by_id('id_username')
         self.assertEqual(
-            input_box.get_attribute('placeholder'),
+            username_input_box.get_attribute('placeholder'),
             'Username'
         )
+        # Test to check if there is a password_input_box in the page
+        password_input_box = self.browser.find_element_by_id('id_password')
+        self.assertEqual(
+            password_input_box.get_attribute('placeholder'),
+            'Password'
+        )
 
-        # Try to send only username
-        input_box.send_keys('user.name')
-        input_box.send_keys('\n')
+        submit_input_box = self.browser.find_element_by_id('id_submit')
+        self.assertEqual(
+            submit_input_box.get_attribute('value'),
+            'Login'
+        )
+
+        username_input_box.send_keys('user.name')
+        username_input_box.send_keys(Keys.ENTER)
+
+        error_messages = self.browser.find_element_by_id('id_error_messages')
+        self.assertIn(
+            'Password missing!',
+            error_messages.text
+        )
+
+        password_input_box = self.browser.find_element_by_id('id_password')
+        password_input_box.send_keys('teste')
+        password_input_box.send_keys(Keys.ENTER)
+
+        error_messages = self.browser.find_element_by_id('id_error_messages')
+        self.assertIn(
+            'Username missing!',
+            error_messages.text
+        )
+
+        submit_input_box = self.browser.find_element_by_id('id_submit')
+        submit_input_box.click()
+
+        error_messages = self.browser.find_element_by_id('id_error_messages')
+        self.assertIn(
+            'Username and Password missing!',
+            error_messages.text
+        )
+
+        username_input_box = self.browser.find_element_by_id('id_username')
+        password_input_box = self.browser.find_element_by_id('id_password')
+        submit_input_box = self.browser.find_element_by_id('id_submit')
+        username_input_box.send_keys('user.name')
+        password_input_box.send_keys('teste')
+        submit_input_box.click()
+
+        login_status = self.browser.find_element_by_id('id_login_status')
+        self.assertIn(
+            'Login Successfull!',
+            login_status.text
+        )
 
     def test_home_page(self):
         # Go to the home Page

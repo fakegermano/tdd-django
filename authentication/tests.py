@@ -1,4 +1,5 @@
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 from django.test import TestCase
 
 from authentication.views import login_page
@@ -7,9 +8,13 @@ from authentication.views import login_page
 
 class LoginPageViewTest(TestCase):
 
+    # Test if the login_page returns the correct response
     def test_login_page_returns_correct_html(self):
+        # Creates a request
         request = HttpRequest()
+        # Send it to the login_page view
         response = login_page(request)
-        self.assertIn('<title>Login Conpec</title>', response.content.decode('utf8'))
-        self.assertTrue(response.content.startswith('<html>'.encode('utf8')))
-        self.assertTrue(response.content.endswith('</html>'.encode('utf8')))
+
+        # Check the content of the file
+        expected_content = render_to_string('login.html')
+        self.assertEqual(expected_content, response.content.decode('utf8'))

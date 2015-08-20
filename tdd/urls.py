@@ -19,4 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url('^login/', 'authentication.views.login_page', name='login_page'),
+    url('^$', 'home.views.home_page', name='home_page'),
 ]
